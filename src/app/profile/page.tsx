@@ -13,6 +13,7 @@ import StepRoadmap from '../../components/ui/StepRoadmap'
 import EmptyState from '../../components/ui/EmptyState'
 import mockUser from '../../data/mockUser'
 import mockProject from '../../data/mockProject'
+import platformInfo from '../../data/platformInfo'
 import { getNextStepByProjectStage, getProjectProgress, getRoadmapStepStatus, getStageTitle } from '../../shared/lib/mockHelpers'
 import { safeReadLocalStorage, removeKey } from '../../shared/lib/storage'
 import type { Project } from '../../entities/project/types'
@@ -279,6 +280,20 @@ export default function ProfilePage() {
         </div>
 
         <div className="space-y-6">
+          <Card title="Связанные проектные инициативы" className="p-6">
+            <div className="space-y-2 text-sm text-gray-700">
+              {platformInfo.initiatives.map(initiative => (
+                <div key={initiative.id}>
+                  {initiative.title} — {initiative.projectLeadLabel.toLowerCase()}: {initiative.projectLead}.
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 space-y-1 text-sm text-gray-600">
+              <div>{platformInfo.ideologist} — идеолог платформы «КУБ».</div>
+              <div>Пантелеев — проектное руководство CavkazVision и KubanVision.</div>
+            </div>
+          </Card>
+
           <Card title="Мои заявки в команду" className="p-6">
             {hasTeamRequest ? (
               <div className="space-y-4">

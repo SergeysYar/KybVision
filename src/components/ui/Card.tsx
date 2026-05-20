@@ -11,7 +11,7 @@ interface Props {
 
 export const Card: React.FC<Props> = ({ children, className = '', padding = 'p-6', title, description, action }) => {
   return (
-    <div className={`bg-[var(--card)] rounded-3xl shadow-sm border border-[var(--border)] ${padding} ${className}`}>
+    <div className={`bg-[var(--card)] rounded-3xl shadow-sm border border-[var(--border)] ${padding} ${className} transition-all hover:-translate-y-0.5 hover:shadow-md`}> 
       {title && (
         <div className="mb-3 flex items-start justify-between">
           <div>

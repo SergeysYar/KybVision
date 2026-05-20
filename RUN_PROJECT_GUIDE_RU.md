@@ -63,6 +63,12 @@ npm install
 npm run dev
 ```
 
+Если вы запускаете из PowerShell и видите ошибку про `npm.ps1`, используйте:
+
+```bat
+cmd /c npm run dev
+```
+
 После запуска в консоли будет адрес, обычно:
 
 ```text

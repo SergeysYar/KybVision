@@ -22,6 +22,12 @@ npm install
 npm run dev
 ```
 
+Для PowerShell (если есть ошибка `npm.ps1`):
+
+```bash
+cmd /c npm run dev
+```
+
 4. Откройте в браузере:
 
 `http://localhost:3000`
@@ -36,6 +42,11 @@ npm run dev
 - `/ai` — AI-наставник
 - `/profile` — профиль
 - `/admin` — demo-админка
+
+## Навигация
+
+- В меню подсвечивается только активный текущий раздел.
+- На странице `/profile` остальные пункты меню остаются видимыми и контрастными.
 
 ## Документация в проекте
 
@@ -53,4 +64,3 @@ npm run dev
 - React 18
 - TypeScript
 - Tailwind CSS
-

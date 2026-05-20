@@ -76,4 +76,25 @@ export const safeSaveProject = (project: unknown) => {
   }
 }
 
-export default { STORAGE_KEYS, loadJSON, saveJSON, removeKey, safeReadProject, safeSaveProject }
+export const safeReadArrayFromStorage = <T>(key: string, fallback: T[]): T[] => {
+  try {
+    if (typeof window === 'undefined') return fallback
+    const raw = localStorage.getItem(key)
+    if (!raw) return fallback
+    return JSON.parse(raw) as T[]
+  } catch (e) {
+    console.warn('safeReadArrayFromStorage parse error', e)
+    return fallback
+  }
+}
+
+export const safeWriteArrayToStorage = <T>(key: string, value: T[]): void => {
+  try {
+    if (typeof window === 'undefined') return
+    localStorage.setItem(key, JSON.stringify(value))
+  } catch (e) {
+    console.error('safeWriteArrayToStorage error', e)
+  }
+}
+
+export default { STORAGE_KEYS, loadJSON, saveJSON, removeKey, safeReadProject, safeSaveProject, safeReadArrayFromStorage, safeWriteArrayToStorage }

@@ -25,6 +25,27 @@ export const saveJSON = (key: string, payload: unknown) => {
   }
 }
 
+export const safeJsonParse = <T>(value: string | null, fallback: T): T => {
+  if (value === null) return fallback
+  try {
+    return JSON.parse(value) as T
+  } catch (e) {
+    console.warn('safeJsonParse error', e)
+    return fallback
+  }
+}
+
+export const safeReadLocalStorage = <T>(key: string, fallback: T): T => {
+  try {
+    if (typeof window === 'undefined') return fallback
+    const raw = localStorage.getItem(key)
+    return safeJsonParse(raw, fallback)
+  } catch (e) {
+    console.warn('safeReadLocalStorage error', e)
+    return fallback
+  }
+}
+
 export const removeKey = (key: string) => {
   try {
     if (typeof window === 'undefined') return

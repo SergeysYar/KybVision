@@ -1,0 +1,37 @@
+export const STORAGE_KEYS = {
+  USER: 'kub_user',
+  PROJECT: 'kub_project',
+  TEAM_REQUESTS: 'kub_team_requests',
+}
+
+export const loadJSON = <T>(key: string, fallback: T): T => {
+  try {
+    if (typeof window === 'undefined') return fallback
+    const raw = localStorage.getItem(key)
+    if (!raw) return fallback
+    return JSON.parse(raw) as T
+  } catch (e) {
+    console.error('loadJSON error', e)
+    return fallback
+  }
+}
+
+export const saveJSON = (key: string, payload: unknown) => {
+  try {
+    if (typeof window === 'undefined') return
+    localStorage.setItem(key, JSON.stringify(payload))
+  } catch (e) {
+    console.error('saveJSON error', e)
+  }
+}
+
+export const removeKey = (key: string) => {
+  try {
+    if (typeof window === 'undefined') return
+    localStorage.removeItem(key)
+  } catch (e) {
+    console.error('removeKey error', e)
+  }
+}
+
+export default { STORAGE_KEYS, loadJSON, saveJSON, removeKey }

@@ -34,6 +34,13 @@ export const getUpcomingOpportunities = (limit = 5): Opportunity[] => {
     .slice(0, limit)
 }
 
+export const getRelevantOpportunities = (track: 'Новичок' | 'Есть идея' | 'Почти проект', limit = 3): Opportunity[] => {
+  return mockOpportunities
+    .filter(item => item.isPublished && item.tracks.includes(track))
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .slice(0, limit)
+}
+
 export const getTeamRequestsByStatus = (status: 'active' | 'closed' | 'moderation'): TeamRequest[] => {
   return mockTeamRequests.filter(item => item.status === status)
 }
@@ -153,9 +160,124 @@ export const getDashboardTip = (stage: ProjectStage): string => {
   }
 }
 
-export const getRelevantOpportunities = (track: Track, limit = 3): Opportunity[] => {
-  return mockOpportunities
-    .filter(item => item.isPublished && item.tracks.includes(track))
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-    .slice(0, limit)
+export const getProjectRecommendations = (stage: ProjectStage) => {
+  switch (stage) {
+    case 'idea':
+      return [
+        {
+          title: 'Сформулируйте проблему',
+          description: 'Опишите, кому нужен проект и почему проблема важна.',
+          route: '/project',
+        },
+        {
+          title: 'Оформите карточку проекта',
+          description: 'Заполните проблему, решение и ценность.',
+          route: '/project',
+        },
+        {
+          title: 'Посмотрите мероприятия для старта',
+          description: 'Для ранней идеи подойдут интенсивы, кружки и встречи с наставниками.',
+          route: '/opportunities',
+        },
+      ]
+    case 'card':
+      return [
+        {
+          title: 'Проверьте полноту карточки',
+          description: 'Убедитесь, что проблема, решение и ценность сформулированы.',
+          route: '/project',
+        },
+        {
+          title: 'Создайте заявку на поиск команды',
+          description: 'Чёткая карточка помогает быстрее найти нужных участников.',
+          route: '/team',
+        },
+        {
+          title: 'Посмотрите конкурсы для трека “Есть идея”',
+          description: 'Ищите ближайшие хакатоны и конкурсы по вашему треку.',
+          route: '/opportunities',
+        },
+      ]
+    case 'team':
+      return [
+        {
+          title: 'Опубликуйте заявку в команду',
+          description: 'Расскажите, какие роли нужны и что делает проект особенным.',
+          route: '/team',
+        },
+        {
+          title: 'Найдите недостающие роли',
+          description: 'Определите конкретные задачи для разработчика, дизайнера или аналитика.',
+          route: '/team',
+        },
+        {
+          title: 'Подготовьте короткое описание для участников',
+          description: 'Сформируйте понятную презентацию проекта для команды.',
+          route: '/project',
+        },
+      ]
+    case 'contest':
+      return [
+        {
+          title: 'Выберите конкурс или хакатон',
+          description: 'Найдите площадку, подходящую для вашего формата проекта.',
+          route: '/opportunities',
+        },
+        {
+          title: 'Подготовьте питч',
+          description: 'Сделайте короткую презентацию проблемы и решения.',
+          route: '/project',
+        },
+        {
+          title: 'Проверьте дедлайны',
+          description: 'Убедитесь, что вы успеваете подготовить заявку вовремя.',
+          route: '/opportunities',
+        },
+      ]
+    case 'mvp':
+      return [
+        {
+          title: 'Подготовьте демонстрацию MVP',
+          description: 'Соберите базовую версию, которую можно показать экспертам.',
+          route: '/project',
+        },
+        {
+          title: 'Соберите обратную связь',
+          description: 'Покажите проект команде и потенциальным пользователям.',
+          route: '/team',
+        },
+        {
+          title: 'Подайте проект на акселератор или конкурс',
+          description: 'Ищите программы для поддержки готовых прототипов.',
+          route: '/opportunities',
+        },
+      ]
+    default:
+      return [
+        {
+          title: 'Продолжайте работу над проектом',
+          description: 'Перейдите к следующему шагу и обновите карточку.',
+          route: '/project',
+        },
+      ]
+  }
+}
+
+export const getProjectCompleteness = (project: {
+  title: string
+  problem: string
+  solution: string
+  value: string
+  audience: string
+  stage: ProjectStage
+}) => {
+  const fields = ['title', 'problem', 'solution', 'value', 'audience', 'stage'] as const
+  const filled = fields.reduce((count, key) => {
+    const value = project[key]
+    if (typeof value === 'string') {
+      return count + (value.trim().length > 0 ? 1 : 0)
+    }
+    return count + (value ? 1 : 0)
+  }, 0)
+  return Math.round((filled / fields.length) * 100)
 }

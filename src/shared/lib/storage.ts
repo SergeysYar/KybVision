@@ -34,4 +34,25 @@ export const removeKey = (key: string) => {
   }
 }
 
-export default { STORAGE_KEYS, loadJSON, saveJSON, removeKey }
+export const safeReadProject = <T>(fallback: T | null): T | null => {
+  try {
+    if (typeof window === 'undefined') return fallback
+    const raw = localStorage.getItem(STORAGE_KEYS.PROJECT)
+    if (!raw) return fallback
+    return JSON.parse(raw) as T
+  } catch (e) {
+    console.warn('safeReadProject parse error', e)
+    return fallback
+  }
+}
+
+export const safeSaveProject = (project: unknown) => {
+  try {
+    if (typeof window === 'undefined') return
+    localStorage.setItem(STORAGE_KEYS.PROJECT, JSON.stringify(project))
+  } catch (e) {
+    console.error('safeSaveProject error', e)
+  }
+}
+
+export default { STORAGE_KEYS, loadJSON, saveJSON, removeKey, safeReadProject, safeSaveProject }

@@ -1,5 +1,7 @@
 export type ProjectStage = 'idea' | 'card' | 'team' | 'contest' | 'mvp'
 
+export type TeamRole = 'developer' | 'designer' | 'marketer' | 'analyst' | 'mentor'
+
 export interface Project {
   id: string
   userId: string
@@ -10,7 +12,7 @@ export interface Project {
   audience: string
   stage: ProjectStage
   needsTeam: boolean
-  requiredRoles: string[]
+  requiredRoles: TeamRole[]
   createdAt: string
   updatedAt: string
 }
